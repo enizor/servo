@@ -2558,14 +2558,24 @@ impl DocumentMethods for Document {
 
     // https://dom.spec.whatwg.org/#dom-document-createelement
     fn CreateElement(&self, mut local_name: DOMString) -> Fallible<Root<Element>> {
+        // Step 1
         if xml_name_type(&local_name) == InvalidXMLName {
             debug!("Not a valid element name");
             return Err(Error::InvalidCharacter);
         }
-        if self.is_html_document {
+        // Step 2
+        let ns = if self.is_html_document {
             local_name.make_ascii_lowercase();
-        }
-        let name = QualName::new(ns!(html), LocalName::from(local_name));
+            ns!(html)
+        } else {
+            ns!()
+        };
+        // Step 3: Let is be the value of is member of options, or null if no such member exists.
+        // Step 4 . PB namespace ? -------
+        let name = QualName::new(ns, LocalName::from(local_name));
+        // Step 6 : If is is non-null, then set an attribute value for element using "is" and is.
+
+        //Step 5 (creation) & 7 (return)
         Ok(Element::create(name, None, self, ElementCreator::ScriptCreated))
     }
 
