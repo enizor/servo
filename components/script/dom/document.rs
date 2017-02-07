@@ -2570,11 +2570,9 @@ impl DocumentMethods for Document {
         } else {
             ns!()
         };
-        // Step 3: Let is be the value of is member of options, or null if no such member exists.
-        // Step 4 . PB namespace ? -------
+        // Step 3 and 6 aren't supported yet.
+        // Step 4
         let name = QualName::new(ns, LocalName::from(local_name));
-        // Step 6 : If is is non-null, then set an attribute value for element using "is" and is.
-
         //Step 5 (creation) & 7 (return)
         Ok(Element::create(name, None, self, ElementCreator::ScriptCreated))
     }
